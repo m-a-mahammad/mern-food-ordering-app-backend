@@ -5,9 +5,12 @@ import mongoose from "mongoose";
 import myUserRoute from "./routes/MyUserRoute";
 import { v2 as cloudinary } from "cloudinary";
 import myRestaurantRoute from "./routes/MyRestaurantRoute";
+import restaurantRoute from "./routes/RestaurantRoute";
 
 /* CONNECT TO DATABASE */
-mongoose.connect(process.env.MONGO_URL as string).then(() => console.log("Connected to database!"));
+mongoose
+  .connect(process.env.MONGO_URL as string)
+  .then(() => console.log("Connected to database!"));
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -20,13 +23,14 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.get("/health", (req: Request, res: Response) => {
+app.get("/health", async (req: Request, res: Response) => {
   res.send({ message: "health OK!" });
 });
 
 /* ROUTES */
 app.use("/api/my/user", myUserRoute);
 app.use("/api/my/restaurant", myRestaurantRoute);
+app.use("/api/restaurant", restaurantRoute);
 
 /* RUN SERVER ON PORT 7000 */
 const port = process.env.PORT || 6000;
